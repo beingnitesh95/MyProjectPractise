@@ -1,0 +1,102 @@
+package testng.day5;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
+
+import webdriver.day2.Setup;
+
+public class SupplyTestData implements Setup{
+
+	
+	
+	
+	//@Test(dataProvider="loginData")
+	public void dataProviderTestCase(String username,String password) {
+		
+		System.setProperty(CHROME_KEY, CHROME_PATH);
+		WebDriver driver=new ChromeDriver();
+		driver.get("http://automationpractice.com/index.php?controller=authentication&back=my-account");
+
+		new WebDriverWait(driver, 50).until(ExpectedConditions.visibilityOfElementLocated(By.id("email")));
+		driver.findElement(By.id("email")).sendKeys(username);
+		driver.findElement(By.id("passwd")).sendKeys(password);
+		driver.findElement(By.id("SubmitLogin")).click();
+		new WebDriverWait(driver, 50).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[@class='logout']")));
+		driver.findElement(By.xpath("//a[@class='logout']")).click();
+
+		
+	}
+	
+	
+	
+	@DataProvider
+	public Object[][] loginData() {
+
+		Object[][] data=new Object[2][2];
+		
+		data[0][0]="manoj@mailinator.com";
+		data[0][1]="Manoj@123";
+		
+		data[1][0]="manoj1@mailinator.com";
+		data[1][1]="Manoj@123";
+			
+		return data;
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+
+	@Test
+	public void testCase() {
+
+		System.setProperty(CHROME_KEY, CHROME_PATH);
+		WebDriver driver=new ChromeDriver();
+		driver.get("http://automationpractice.com/index.php?controller=authentication&back=my-account");
+
+
+		List<String> userNames=new ArrayList();
+		userNames.add("manoj@mailinator.com");
+		userNames.add("manoj1@mailinator.com");
+
+		List<String> passwords=new ArrayList();
+		passwords.add("Manoj@123");
+		passwords.add("Manoj@123");
+
+
+		for(int i=0;i<userNames.size();i++) {
+
+			new WebDriverWait(driver, 50).until(ExpectedConditions.visibilityOfElementLocated(By.id("email")));
+			driver.findElement(By.id("email")).sendKeys(userNames.get(i));
+
+
+			driver.findElement(By.id("passwd")).sendKeys(passwords.get(i));
+
+			driver.findElement(By.id("SubmitLogin")).click();
+			new WebDriverWait(driver, 50).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[@class='logout']")));
+			driver.findElement(By.xpath("//a[@class='logout']")).click();
+
+		}
+	}
+
+	
+	
+	
+	
+	
+	
+}
+
